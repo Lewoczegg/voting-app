@@ -2,7 +2,6 @@ package com.example.votingsystem.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @AllArgsConstructor
@@ -11,20 +10,22 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Candidate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long candidate_id;
 
-    @NotNull
     @NotBlank
-    private String username;
+    private String name;
 
-    @NotNull
     @NotBlank
-    private String password;
+    private String surname;
 
-    private boolean voted;
+    private Long votes = 0L;
+
+    @ManyToOne
+    @JoinColumn(name = "political_party_id")
+    private PoliticalParty politicalParty;
 
     @ManyToOne
     @JoinColumn(name = "constituency_id")

@@ -1,11 +1,10 @@
 package com.example.votingsystem.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +15,11 @@ import lombok.*;
 public class PoliticalParty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long political_party_id;
 
     @NotBlank
     private String name;
+
+    @OneToMany(mappedBy = "politicalParty")
+    private Set<Candidate> candidates;
 }
