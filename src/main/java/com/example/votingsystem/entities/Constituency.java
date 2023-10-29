@@ -2,8 +2,9 @@ package com.example.votingsystem.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,22 +12,16 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Constituency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @NotNull
     @NotBlank
-    private String username;
+    private String constituencyName;
 
-    @NotNull
-    @NotBlank
-    private String password;
+    private int numberOfSeats;
 
-    private boolean voted;
-
-    @ManyToOne
-    @JoinColumn(name = "constituency_id")
-    private Constituency constituency;
+    @OneToMany(mappedBy = "constituency")
+    private Set<User> users;
 }
