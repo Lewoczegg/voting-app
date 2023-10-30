@@ -5,6 +5,7 @@ import com.example.votingsystem.entities.Constituency;
 import com.example.votingsystem.entities.PoliticalParty;
 import com.example.votingsystem.repositories.CandidateRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CandidateServiceImpl implements CandidateService {
-    private CandidateRepository candidateRepository;
+
+    private final CandidateRepository candidateRepository;
 
     @Override
     public List<Candidate> findByPoliticalParty(PoliticalParty politicalParty) {

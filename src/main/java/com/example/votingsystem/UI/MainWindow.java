@@ -1,6 +1,8 @@
 package com.example.votingsystem.UI;
 
+import com.example.votingsystem.entities.Candidate;
 import com.example.votingsystem.entities.PoliticalParty;
+import com.example.votingsystem.services.CandidateService;
 import com.example.votingsystem.services.PoliticalPartyService;
 import jexer.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,9 @@ public class MainWindow {
 
     @Autowired
     private PoliticalPartyService politicalPartyService;
+
+    @Autowired
+    private CandidateService candidateService;
 
     private TApplication app;
     private TWindow mainWindow;
@@ -70,8 +75,7 @@ public class MainWindow {
             new TButton(partyWindow, party.getName(), 0, buttonYPosition, new TAction() {
                 @Override
                 public void DO() {
-                    // Handle party button click if needed
-                    System.out.println("Selected party: " + party.getName());
+                    showCandidatesForParty(party);
                 }
             });
             buttonYPosition += buttonHeight;
@@ -84,5 +88,31 @@ public class MainWindow {
                 partyWindow.close();
             }
         });
+    }
+    private void showCandidatesForParty(PoliticalParty party) {
+        TWindow candidatesWindow = app.addWindow("Candidates for " + party.getName(), 0, 0, 80, 24);
+
+        List<Candidate> candidates = candidateService.findByPoliticalParty(party);
+        System.out.println(candidates);
+
+        int buttonYPosition = 0;
+        int buttonHeight = 2;
+
+        StringBuilder candidatesText = new StringBuilder();
+        for (Candidate candidate : candidates) {
+            candidatesText.append(candidate.getName()).append(" ").append(candidate.getSurname()).append("\n");
+        }
+
+        new TText(candidatesWindow, candidatesText.toString(), 5, 0, 60, 19);
+
+        // Add a close button for the candidates window
+        new TButton(candidatesWindow, "Close", 50, 20, new TAction() {
+            @Override
+            public void DO() {
+                candidatesWindow.close();
+            }
+        });
+
+        new TLabel(candidatesWindow, "Use TAB to navigate between elements.", 5, 20);
     }
 }
