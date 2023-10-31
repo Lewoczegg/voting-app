@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PoliticalPartyService {
     List<PoliticalParty> getAllPoliticalParties();
+
+    String getASCIIArt(Long partyId);
 }

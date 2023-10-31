@@ -93,17 +93,17 @@ public class MainWindow {
         TWindow candidatesWindow = app.addWindow("Candidates for " + party.getName(), 0, 0, 80, 24);
 
         List<Candidate> candidates = candidateService.findByPoliticalParty(party);
-        System.out.println(candidates);
 
         int buttonYPosition = 0;
         int buttonHeight = 2;
 
         StringBuilder candidatesText = new StringBuilder();
+        candidatesText.append(politicalPartyService.getASCIIArt(party.getPolitical_party_id())).append("\n");
         for (Candidate candidate : candidates) {
             candidatesText.append(candidate.getName()).append(" ").append(candidate.getSurname()).append("\n");
         }
 
-        new TText(candidatesWindow, candidatesText.toString(), 5, 0, 60, 19);
+        new TText(candidatesWindow, candidatesText.toString(), 2, 0, 75, 19);
 
         // Add a close button for the candidates window
         new TButton(candidatesWindow, "Close", 50, 20, new TAction() {
