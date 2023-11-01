@@ -1,6 +1,7 @@
 package com.example.votingsystem.UI;
 
 import com.example.votingsystem.entities.Candidate;
+import com.example.votingsystem.entities.Constituency;
 import com.example.votingsystem.entities.PoliticalParty;
 import com.example.votingsystem.services.CandidateService;
 import com.example.votingsystem.services.PoliticalPartyService;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @AllArgsConstructor
 @Component
@@ -30,7 +31,7 @@ public class MainWindow {
         app = new TApplication(TApplication.BackendType.SWING); // or XTERM for pure terminal experience
 
         // Create main window
-        TWindow mainWindow = app.addWindow("Voting App", 0, 0, 80, 24);
+        mainWindow = app.addWindow("Voting App", 0, 0, 80, 24);
 
         TButton button1 = new TButton(mainWindow, "Log IN", 10, 5, new TAction() {
             @Override
@@ -53,8 +54,6 @@ public class MainWindow {
                 System.out.println("Button3");
             }
         });
-
-
     }
 
     public void run() {
@@ -82,7 +81,7 @@ public class MainWindow {
         }
 
         // Add a button to close the window at the bottom or another suitable position
-        TButton closeButton = new TButton(partyWindow, "Close", 20, buttonYPosition, new TAction() {
+        TButton closeButton = new TButton(partyWindow, "Cofnij", 20, buttonYPosition, new TAction() {
             @Override
             public void DO() {
                 partyWindow.close();
@@ -90,29 +89,29 @@ public class MainWindow {
         });
     }
     private void showCandidatesForParty(PoliticalParty party) {
-        TWindow candidatesWindow = app.addWindow("Candidates for " + party.getName(), 0, 0, 80, 24);
+        TWindow candidatesWindow = app.addWindow("Kandydaci dla " + party.getName(), 0, 0, 80, 24);
 
-        List<Candidate> candidates = candidateService.findByPoliticalParty(party);
+        Map<Constituency, List<Candidate>> groupedCandidates = candidateService.getCandidatesGroupedByConstituency(party);
 
-        int buttonYPosition = 0;
-        int buttonHeight = 2;
+        StringBuilder displayText = new StringBuilder();
+        displayText.append(politicalPartyService.getASCIIArt(party.getPolitical_party_id())).append("\n");
+        groupedCandidates.forEach((constituency, candidates) -> {
+            displayText.append("OKRĘG WYBORCZY NR " + constituency.getConstituency_id() + ":\n");
+            for(Candidate candidate : candidates) {
+                displayText.append("**  " + candidate.getName() + " " + candidate.getSurname() + "\n");
+            }
+            displayText.append("\n");
+        });
 
-        StringBuilder candidatesText = new StringBuilder();
-        candidatesText.append(politicalPartyService.getASCIIArt(party.getPolitical_party_id())).append("\n");
-        for (Candidate candidate : candidates) {
-            candidatesText.append(candidate.getName()).append(" ").append(candidate.getSurname()).append("\n");
-        }
+        new TText(candidatesWindow, displayText.toString(), 2, 0, 75, 19);
 
-        new TText(candidatesWindow, candidatesText.toString(), 2, 0, 75, 19);
-
-        // Add a close button for the candidates window
-        new TButton(candidatesWindow, "Close", 50, 20, new TAction() {
+        new TButton(candidatesWindow, "Cofnij", 66, 20, new TAction() {
             @Override
             public void DO() {
                 candidatesWindow.close();
             }
         });
 
-        new TLabel(candidatesWindow, "Use TAB to navigate between elements.", 5, 20);
+        new TLabel(candidatesWindow, "Do poruszania się pomiędzy elementami używaj klawisza TAB.", 5, 20);
     }
 }
