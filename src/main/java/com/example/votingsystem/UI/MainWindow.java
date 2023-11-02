@@ -25,6 +25,8 @@ public class MainWindow {
     private LoginWindow loginWindow;
 
     TButton logInButton;
+    TButton voteButton;
+    TButton logOutButton;
 
     public MainWindow() throws UnsupportedEncodingException {
         app = new TApplication(TApplication.BackendType.SWING); // or XTERM for pure terminal experience
@@ -53,7 +55,7 @@ public class MainWindow {
     @PostConstruct
     public void init() {
         this.partyWindow = new PartyWindow(app, politicalPartyService, candidateService);
-        this.loginWindow = new LoginWindow(app, loginService, mainWindow, this);
+        this.loginWindow = new LoginWindow(app, loginService, this);
     }
 
     public void run() {
@@ -73,5 +75,35 @@ public class MainWindow {
 
     public void removeLogInButton() {
         logInButton.remove();
+    }
+
+    public void addVoteButton() {
+        voteButton = new TButton(mainWindow, "Vote", 10, 5, new TAction() {
+            @Override
+            public void DO() {
+                System.out.println("Vote");
+            }
+        });
+    }
+
+    public void removeVoteButton() {
+        voteButton.remove();
+    }
+
+    public void addLogOutButton() {
+        logOutButton = new TButton(mainWindow, "Wyloguj", 10, 14, new TAction() {
+            @Override
+            public void DO() {
+                System.out.println("Logout Button");
+                loginService.logout();
+                removeLogoutButton();
+                removeVoteButton();
+                addLogInButton();
+            }
+        });
+    }
+
+    public void removeLogoutButton() {
+        logOutButton.remove();
     }
 }

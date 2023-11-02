@@ -6,16 +6,12 @@ import jexer.*;
 public class LoginWindow {
     private final TApplication app;
     private final LoginService loginService;
-    private final TWindow mainWindow;
-    private final MainWindow mainWindowClass;
+    private final MainWindow mainWindow;
 
-    TButton logoutButton;
-
-    public LoginWindow(TApplication app, LoginService loginService, TWindow mainWindow, MainWindow mainWindowClass) {
+    public LoginWindow(TApplication app, LoginService loginService, MainWindow mainWindow) {
         this.app = app;
         this.loginService = loginService;
         this.mainWindow = mainWindow;
-        this.mainWindowClass = mainWindowClass;
     }
 
     public void showLoginWindow() {
@@ -36,8 +32,9 @@ public class LoginWindow {
                 String password = passwordField.getText();
                 loginService.authenticateAndLogin(username, password);
                 if (loginService.isLoggedIn()) {
-                    addLogoutButton();
-                    mainWindowClass.removeLogInButton();
+                    mainWindow.addLogOutButton();
+                    mainWindow.removeLogInButton();
+                    mainWindow.addVoteButton();
                     loginWindow.close();
                 } else {
                     errorMessage.setLabel("Invalid login or password!");
@@ -51,22 +48,5 @@ public class LoginWindow {
                 loginWindow.close();
             }
         });
-    }
-
-    private void addLogoutButton() {
-        logoutButton = new TButton(mainWindow, "Wyloguj", 10, 14, new TAction() {
-            @Override
-            public void DO() {
-                System.out.println("Logout Button");
-                loginService.logout();
-                removeLogoutButton();
-            }
-        });
-    }
-
-    private void removeLogoutButton() {
-        mainWindowClass.addLogInButton();
-        mainWindow.getChildren().get(0).activate();
-        logoutButton.remove();
     }
 }
