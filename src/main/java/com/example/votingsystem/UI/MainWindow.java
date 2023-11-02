@@ -24,19 +24,15 @@ public class MainWindow {
     private PartyWindow partyWindow;
     private LoginWindow loginWindow;
 
+    TButton logInButton;
+
     public MainWindow() throws UnsupportedEncodingException {
         app = new TApplication(TApplication.BackendType.SWING); // or XTERM for pure terminal experience
 
         // Create main window
         mainWindow = app.addWindow("Voting App", 0, 0, 80, 24);
 
-        TButton button1 = new TButton(mainWindow, "Zaloguj", 10, 5, new TAction() {
-            @Override
-            public void DO() {
-                System.out.println("Button1");
-                loginWindow.showLoginWindow();
-            }
-        });
+        addLogInButton();
 
         TButton button2 = new TButton(mainWindow, "Pokaż partie", 10, 8, new TAction() {
             @Override
@@ -57,11 +53,25 @@ public class MainWindow {
     @PostConstruct
     public void init() {
         this.partyWindow = new PartyWindow(app, politicalPartyService, candidateService);
-        this.loginWindow = new LoginWindow(app, loginService, mainWindow);
+        this.loginWindow = new LoginWindow(app, loginService, mainWindow, this);
     }
 
     public void run() {
         // Main event loop
         app.run();
+    }
+
+    public void addLogInButton() {
+        logInButton = new TButton(mainWindow, "Zaloguj", 10, 5, new TAction() {
+            @Override
+            public void DO() {
+                System.out.println("Button1");
+                loginWindow.showLoginWindow();
+            }
+        });
+    }
+
+    public void removeLogInButton() {
+        logInButton.remove();
     }
 }

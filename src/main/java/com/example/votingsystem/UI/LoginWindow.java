@@ -7,15 +7,15 @@ public class LoginWindow {
     private final TApplication app;
     private final LoginService loginService;
     private final TWindow mainWindow;
+    private final MainWindow mainWindowClass;
 
     TButton logoutButton;
-    TButton firstMenuButton;
 
-    public LoginWindow(TApplication app, LoginService loginService, TWindow mainWindow) {
+    public LoginWindow(TApplication app, LoginService loginService, TWindow mainWindow, MainWindow mainWindowClass) {
         this.app = app;
         this.loginService = loginService;
         this.mainWindow = mainWindow;
-        this.firstMenuButton = (TButton) mainWindow.getChildren().get(0);
+        this.mainWindowClass = mainWindowClass;
     }
 
     public void showLoginWindow() {
@@ -37,7 +37,7 @@ public class LoginWindow {
                 loginService.authenticateAndLogin(username, password);
                 if (loginService.isLoggedIn()) {
                     addLogoutButton();
-                    firstMenuButton.setVisible(false);
+                    mainWindowClass.removeLogInButton();
                     loginWindow.close();
                 } else {
                     errorMessage.setLabel("Invalid login or password!");
@@ -59,14 +59,14 @@ public class LoginWindow {
             public void DO() {
                 System.out.println("Logout Button");
                 loginService.logout();
-                removeButton();
+                removeLogoutButton();
             }
         });
     }
 
-    private void removeButton() {
+    private void removeLogoutButton() {
+        mainWindowClass.addLogInButton();
+        mainWindow.getChildren().get(0).activate();
         logoutButton.remove();
-        firstMenuButton.setVisible(true);
-        firstMenuButton.activate();
     }
 }
