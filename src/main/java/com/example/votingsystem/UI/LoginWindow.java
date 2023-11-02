@@ -2,29 +2,20 @@ package com.example.votingsystem.UI;
 
 import com.example.votingsystem.services.LoginService;
 import jexer.*;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 public class LoginWindow {
     private final TApplication app;
     private final LoginService loginService;
+    private final TWindow mainWindow;
 
-    public LoginWindow(TApplication app, LoginService loginService) {
+    TButton logoutButton;
+    TButton firstMenuButton;
+
+    public LoginWindow(TApplication app, LoginService loginService, TWindow mainWindow) {
         this.app = app;
         this.loginService = loginService;
-    }
-
-    private void updateUIBasedOnAuthenticationStatus() {
-        if (loginService.isLoggedIn()) {
-            // Display elements or messages for authenticated users
-            System.out.println("User is logged in!");
-        } else {
-            // Display elements or messages for non-authenticated users
-            System.out.println("User is not logged in.");
-        }
+        this.mainWindow = mainWindow;
+        this.firstMenuButton = (TButton) mainWindow.getChildren().get(0);
     }
 
     public void showLoginWindow() {
@@ -44,9 +35,10 @@ public class LoginWindow {
                 String username = usernameField.getText();
                 String password = passwordField.getText();
                 loginService.authenticateAndLogin(username, password);
-                updateUIBasedOnAuthenticationStatus();
                 if (loginService.isLoggedIn()) {
-                    loginWindow.close();  // Close the login window if login is successful
+                    addLogoutButton();
+                    firstMenuButton.setVisible(false);
+                    loginWindow.close();
                 } else {
                     errorMessage.setLabel("Invalid login or password!");
                 }
@@ -56,8 +48,25 @@ public class LoginWindow {
         TButton closeButton = new TButton(loginWindow, "Cofnij", 23, 8, new TAction() {
             @Override
             public void DO() {
-                loginWindow.close();  // Close the login window if login is successful
+                loginWindow.close();
             }
         });
+    }
+
+    private void addLogoutButton() {
+        logoutButton = new TButton(mainWindow, "Wyloguj", 10, 14, new TAction() {
+            @Override
+            public void DO() {
+                System.out.println("Logout Button");
+                loginService.logout();
+                removeButton();
+            }
+        });
+    }
+
+    private void removeButton() {
+        logoutButton.remove();
+        firstMenuButton.setVisible(true);
+        firstMenuButton.activate();
     }
 }

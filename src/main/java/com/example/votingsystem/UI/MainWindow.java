@@ -5,15 +5,7 @@ import com.example.votingsystem.services.LoginService;
 import com.example.votingsystem.services.PoliticalPartyService;
 import jakarta.annotation.PostConstruct;
 import jexer.*;
-import jexer.bits.CellAttributes;
-import jexer.bits.Color;
-import jexer.bits.ColorTheme;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -65,7 +57,7 @@ public class MainWindow {
     @PostConstruct
     public void init() {
         this.partyWindow = new PartyWindow(app, politicalPartyService, candidateService);
-        this.loginWindow = new LoginWindow(app, loginService);
+        this.loginWindow = new LoginWindow(app, loginService, mainWindow);
     }
 
     public void run() {

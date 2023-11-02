@@ -27,4 +27,8 @@ public class LoginService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null && authentication.isAuthenticated();
     }
+
+    public void logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+    }
 }
