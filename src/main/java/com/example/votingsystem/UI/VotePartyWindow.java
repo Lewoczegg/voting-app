@@ -4,6 +4,7 @@ import com.example.votingsystem.entities.PoliticalParty;
 import com.example.votingsystem.services.CandidateService;
 import com.example.votingsystem.services.LoginService;
 import com.example.votingsystem.services.PoliticalPartyService;
+import com.example.votingsystem.services.VotingService;
 import jexer.TAction;
 import jexer.TApplication;
 import jexer.TButton;
@@ -16,19 +17,21 @@ public class VotePartyWindow {
     private final PoliticalPartyService politicalPartyService;
     private final CandidateService candidateService;
     private final LoginService loginService;
+    private final VotingService votingService;
     private VoteCandidateWindow voteCandidateWindow;
 
 
-    public VotePartyWindow(TApplication app, PoliticalPartyService politicalPartyService, CandidateService candidateService, LoginService loginService) {
+    public VotePartyWindow(TApplication app, PoliticalPartyService politicalPartyService, CandidateService candidateService, LoginService loginService, VotingService votingService) {
         this.app = app;
         this.politicalPartyService = politicalPartyService;
         this.candidateService = candidateService;
         this.loginService = loginService;
-        this.voteCandidateWindow = new VoteCandidateWindow(app, candidateService, loginService);
+        this.votingService = votingService;
     }
 
     public void show() {
         TWindow votePartyWindow = app.addWindow("Wybierz parite", 0, 0, 80, 24);
+        voteCandidateWindow = new VoteCandidateWindow(app, candidateService, loginService, votingService, votePartyWindow);
         List<PoliticalParty> parties = politicalPartyService.getAllPoliticalParties();
 
         int buttonYPosition = 0;

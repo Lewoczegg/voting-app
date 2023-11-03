@@ -1,8 +1,6 @@
 package com.example.votingsystem.UI;
 
-import com.example.votingsystem.services.CandidateService;
-import com.example.votingsystem.services.LoginService;
-import com.example.votingsystem.services.PoliticalPartyService;
+import com.example.votingsystem.services.*;
 import jakarta.annotation.PostConstruct;
 import jexer.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,9 @@ public class MainWindow {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private VotingService votingService;
+
     private TApplication app;
     private TWindow mainWindow;
     private PartyWindow partyWindow;
@@ -28,6 +29,7 @@ public class MainWindow {
     TButton logInButton;
     TButton voteButton;
     TButton logOutButton;
+    TLabel alreadyVotedLabel;
 
     public MainWindow() throws UnsupportedEncodingException {
         app = new TApplication(TApplication.BackendType.SWING); // or XTERM for pure terminal experience
@@ -57,7 +59,7 @@ public class MainWindow {
     public void init() {
         this.partyWindow = new PartyWindow(app, politicalPartyService, candidateService);
         this.loginWindow = new LoginWindow(app, loginService, this);
-        this.votePartyWindow = new VotePartyWindow(app, politicalPartyService, candidateService, loginService);
+        this.votePartyWindow = new VotePartyWindow(app, politicalPartyService, candidateService, loginService, votingService);
     }
 
     public void run() {
@@ -83,7 +85,11 @@ public class MainWindow {
         voteButton = new TButton(mainWindow, "Vote", 10, 5, new TAction() {
             @Override
             public void DO() {
-                votePartyWindow.show();
+                if (loginService.getCurrentUser().isVoted()) {
+                    addAlreadyVotedLabel();
+                } else {
+                    votePartyWindow.show();
+                }
             }
         });
     }
@@ -96,10 +102,10 @@ public class MainWindow {
         logOutButton = new TButton(mainWindow, "Wyloguj", 10, 14, new TAction() {
             @Override
             public void DO() {
-                System.out.println("Logout Button");
                 loginService.logout();
                 removeLogoutButton();
                 removeVoteButton();
+                removeAlreadyVotedLabel();
                 addLogInButton();
             }
         });
@@ -107,5 +113,13 @@ public class MainWindow {
 
     public void removeLogoutButton() {
         logOutButton.remove();
+    }
+
+    public void addAlreadyVotedLabel() {
+        alreadyVotedLabel = new TLabel(mainWindow, "You have already voted!", 20, 5);
+    }
+
+    public void removeAlreadyVotedLabel() {
+        alreadyVotedLabel.remove();
     }
 }
