@@ -14,4 +14,6 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
     @Query("SELECT c FROM Candidate c WHERE c.politicalParty = ?1 ORDER BY c.constituency.constituency_id ASC")
     List<Candidate> findByPoliticalPartyOrderByConstituencyIdAsc(PoliticalParty politicalParty);
+
+    List<Candidate> findByPoliticalPartyAndConstituency(PoliticalParty politicalParty, Constituency constituency);
 }

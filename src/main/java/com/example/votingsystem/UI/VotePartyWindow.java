@@ -2,6 +2,7 @@ package com.example.votingsystem.UI;
 
 import com.example.votingsystem.entities.PoliticalParty;
 import com.example.votingsystem.services.CandidateService;
+import com.example.votingsystem.services.LoginService;
 import com.example.votingsystem.services.PoliticalPartyService;
 import jexer.TAction;
 import jexer.TApplication;
@@ -14,12 +15,16 @@ public class VotePartyWindow {
     private final TApplication app;
     private final PoliticalPartyService politicalPartyService;
     private final CandidateService candidateService;
+    private final LoginService loginService;
+    private VoteCandidateWindow voteCandidateWindow;
 
 
-    public VotePartyWindow(TApplication app, PoliticalPartyService politicalPartyService, CandidateService candidateService) {
+    public VotePartyWindow(TApplication app, PoliticalPartyService politicalPartyService, CandidateService candidateService, LoginService loginService) {
         this.app = app;
         this.politicalPartyService = politicalPartyService;
         this.candidateService = candidateService;
+        this.loginService = loginService;
+        this.voteCandidateWindow = new VoteCandidateWindow(app, candidateService, loginService);
     }
 
     public void show() {
@@ -33,7 +38,7 @@ public class VotePartyWindow {
             new TButton(votePartyWindow, party.getName(), 0, buttonYPosition, new TAction() {
                 @Override
                 public void DO() {
-                    System.out.println(party.getName());
+                    voteCandidateWindow.show(party);
                 }
             });
             buttonYPosition += buttonHeight;

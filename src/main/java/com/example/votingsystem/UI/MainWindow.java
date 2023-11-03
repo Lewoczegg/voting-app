@@ -57,7 +57,7 @@ public class MainWindow {
     public void init() {
         this.partyWindow = new PartyWindow(app, politicalPartyService, candidateService);
         this.loginWindow = new LoginWindow(app, loginService, this);
-        this.votePartyWindow = new VotePartyWindow(app, politicalPartyService, candidateService);
+        this.votePartyWindow = new VotePartyWindow(app, politicalPartyService, candidateService, loginService);
     }
 
     public void run() {

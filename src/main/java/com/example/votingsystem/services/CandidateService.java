@@ -11,4 +11,5 @@ public interface CandidateService {
     List<Candidate> findByPoliticalParty(PoliticalParty politicalParty);
     List<Candidate> findByConstituency(Constituency constituency);
     Map<Constituency, List<Candidate>> getCandidatesGroupedByConstituency(PoliticalParty politicalParty);
+    List<Candidate> findByPoliticalPartyAndConstituency(PoliticalParty politicalParty, Constituency constituency);
 }
