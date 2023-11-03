@@ -23,6 +23,7 @@ public class MainWindow {
     private TWindow mainWindow;
     private PartyWindow partyWindow;
     private LoginWindow loginWindow;
+    private VotePartyWindow votePartyWindow;
 
     TButton logInButton;
     TButton voteButton;
@@ -56,6 +57,7 @@ public class MainWindow {
     public void init() {
         this.partyWindow = new PartyWindow(app, politicalPartyService, candidateService);
         this.loginWindow = new LoginWindow(app, loginService, this);
+        this.votePartyWindow = new VotePartyWindow(app, politicalPartyService, candidateService);
     }
 
     public void run() {
@@ -81,7 +83,7 @@ public class MainWindow {
         voteButton = new TButton(mainWindow, "Vote", 10, 5, new TAction() {
             @Override
             public void DO() {
-                System.out.println("Vote");
+                votePartyWindow.show();
             }
         });
     }
