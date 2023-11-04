@@ -9,10 +9,12 @@ import java.util.Map;
 public class ElectionResultsWindow {
     private TApplication app;
     private VotingService votingService;
+    private ElectionStatisticsWindow electionStatisticsWindow;
 
     public ElectionResultsWindow(TApplication app, VotingService votingService) {
         this.app = app;
         this.votingService = votingService;
+        this.electionStatisticsWindow = new ElectionStatisticsWindow(app, votingService);
     }
 
     public void show() {
@@ -33,6 +35,13 @@ public class ElectionResultsWindow {
             @Override
             public void DO() {
                 partyResultsWindow.close();
+            }
+        });
+
+        TButton advancedStatisticsButton = new TButton(partyResultsWindow, "Statystyki", 10, yPosition + 2, new TAction() {
+            @Override
+            public void DO() {
+                electionStatisticsWindow.show();
             }
         });
     }
