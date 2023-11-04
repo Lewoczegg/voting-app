@@ -53,6 +53,8 @@ public class MainWindow {
                 System.out.println("Button3");
             }
         });
+
+        alreadyVotedLabel = new TLabel(mainWindow, "", 20, 5);
     }
 
     @PostConstruct
@@ -116,10 +118,10 @@ public class MainWindow {
     }
 
     public void addAlreadyVotedLabel() {
-        alreadyVotedLabel = new TLabel(mainWindow, "You have already voted!", 20, 5);
+        alreadyVotedLabel.setLabel("You have already voted!");
     }
 
     public void removeAlreadyVotedLabel() {
-        alreadyVotedLabel.remove();
+        alreadyVotedLabel.setLabel("");
     }
 }
