@@ -2,25 +2,20 @@ package com.example.votingsystem.services;
 
 import com.example.votingsystem.entities.Constituency;
 import com.example.votingsystem.entities.User;
-import com.example.votingsystem.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class DatabaseInitializerService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ConstituencyService constituencyService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final ConstituencyService constituencyService;
+    private final PasswordEncoder passwordEncoder;
 
     public void createUsers() {
         List<User> usersToSave = new ArrayList<>();
@@ -40,6 +35,6 @@ public class DatabaseInitializerService {
             }
         }
 
-        userRepository.saveAll(usersToSave);
+        userService.saveAll(usersToSave);
     }
 }

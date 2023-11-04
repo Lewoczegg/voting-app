@@ -16,7 +16,7 @@ public class LoginService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     public boolean authenticateAndLogin(String username, String password) {
         try {
@@ -37,7 +37,7 @@ public class LoginService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             String username = authentication.getName();
-            return userRepository.findByUsername(username).orElse(null);
+            return userService.findByUsername(username).orElse(null);
         }
         return null;
     }
