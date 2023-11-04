@@ -5,6 +5,7 @@ import com.example.votingsystem.repositories.ConstituencyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,5 +21,10 @@ public class ConstituencyServiceImpl implements ConstituencyService {
         } else {
             throw new RuntimeException("Constituency not found for ID: " + id);
         }
+    }
+
+    @Override
+    public List<Constituency> findAll() {
+        return constituencyRepository.findAll();
     }
 }
