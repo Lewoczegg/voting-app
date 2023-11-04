@@ -25,6 +25,7 @@ public class MainWindow {
     private PartyWindow partyWindow;
     private LoginWindow loginWindow;
     private VotePartyWindow votePartyWindow;
+    private ElectionResultsWindow electionResultsWindow;
 
     TButton logInButton;
     TButton voteButton;
@@ -39,18 +40,17 @@ public class MainWindow {
 
         addLogInButton();
 
-        TButton button2 = new TButton(mainWindow, "Pokaż partie", 10, 8, new TAction() {
+        TButton showPartiesButton = new TButton(mainWindow, "Pokaż partie", 10, 8, new TAction() {
             @Override
             public void DO() {
-                System.out.println("Button2");
                 partyWindow.show();
             }
         });
 
-        TButton button3 = new TButton(mainWindow, "Pokaż wyniki", 10, 11, new TAction() {
+        TButton showResultsButton = new TButton(mainWindow, "Pokaż wyniki", 10, 11, new TAction() {
             @Override
             public void DO() {
-                System.out.println("Button3");
+                electionResultsWindow.show();
             }
         });
 
@@ -62,6 +62,7 @@ public class MainWindow {
         this.partyWindow = new PartyWindow(app, politicalPartyService, candidateService);
         this.loginWindow = new LoginWindow(app, loginService, this);
         this.votePartyWindow = new VotePartyWindow(app, politicalPartyService, candidateService, loginService, votingService);
+        this.electionResultsWindow = new ElectionResultsWindow(app, votingService);
     }
 
     public void run() {
@@ -73,7 +74,6 @@ public class MainWindow {
         logInButton = new TButton(mainWindow, "Zaloguj", 10, 5, new TAction() {
             @Override
             public void DO() {
-                System.out.println("Button1");
                 loginWindow.showLoginWindow();
             }
         });

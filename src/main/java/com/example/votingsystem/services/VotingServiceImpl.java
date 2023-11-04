@@ -2,6 +2,7 @@ package com.example.votingsystem.services;
 
 import com.example.votingsystem.entities.Candidate;
 import com.example.votingsystem.entities.Constituency;
+import com.example.votingsystem.entities.PoliticalParty;
 import com.example.votingsystem.entities.User;
 import com.example.votingsystem.repositories.CandidateRepository;
 import com.example.votingsystem.repositories.UserRepository;
@@ -19,6 +20,7 @@ public class VotingServiceImpl implements VotingService {
     private final CandidateRepository candidateRepository;
     private final ConstituencyService constituencyService;
     private final CandidateService candidateService;
+    private final PoliticalPartyService politicalPartyService;
 
     @Override
     public void vote(Long userId, Long candidateId) {
@@ -54,5 +56,19 @@ public class VotingServiceImpl implements VotingService {
             resultsByConstituency.put(constituency, winningCandidates);
         }
         return resultsByConstituency;
+    }
+
+    @Override
+    public Map<PoliticalParty, Long> getDeputiesCountByParty() {
+        Map<Constituency, List<Candidate>> votingResults = getVotingResults();
+
+        List<Candidate> electedCandidates = votingResults.values().stream()
+                .flatMap(List::stream)  // flatten the lists
+                .collect(Collectors.toList());
+
+        Map<PoliticalParty, Long> countByParty = electedCandidates.stream()
+                .collect(Collectors.groupingBy(Candidate::getPoliticalParty, Collectors.counting()));
+
+        return countByParty;
     }
 }
