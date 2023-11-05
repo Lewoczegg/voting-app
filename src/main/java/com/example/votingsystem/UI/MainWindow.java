@@ -54,6 +54,13 @@ public class MainWindow {
             }
         });
 
+        TButton closeButton = new TButton(mainWindow, "Zamknij", 10, 17, new TAction() {
+            @Override
+            public void DO() {
+                app.exit();
+            }
+        });
+
         alreadyVotedLabel = new TLabel(mainWindow, "", 20, 5);
     }
 
