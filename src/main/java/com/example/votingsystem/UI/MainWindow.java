@@ -54,7 +54,7 @@ public class MainWindow {
             }
         });
 
-        TButton closeButton = new TButton(mainWindow, "Zamknij", 10, 17, new TAction() {
+        TButton closeButton = new TButton(mainWindow, "Zamknij", 10, 14, new TAction() {
             @Override
             public void DO() {
                 app.exit();
@@ -91,7 +91,7 @@ public class MainWindow {
     }
 
     public void addVoteButton() {
-        voteButton = new TButton(mainWindow, "Vote", 10, 5, new TAction() {
+        voteButton = new TButton(mainWindow, "Zagłosuj", 10, 5, new TAction() {
             @Override
             public void DO() {
                 if (loginService.getCurrentUser().isVoted()) {
@@ -108,7 +108,7 @@ public class MainWindow {
     }
 
     public void addLogOutButton() {
-        logOutButton = new TButton(mainWindow, "Wyloguj", 10, 14, new TAction() {
+        logOutButton = new TButton(mainWindow, "Wyloguj", 10, 17, new TAction() {
             @Override
             public void DO() {
                 loginService.logout();

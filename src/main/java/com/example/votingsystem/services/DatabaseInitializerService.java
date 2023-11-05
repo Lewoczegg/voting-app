@@ -22,7 +22,7 @@ public class DatabaseInitializerService {
     private final VotingService votingService;
     private final CandidateService candidateService;
 
-    public void createUsers() {
+    private void createUsers() {
         List<User> usersToSave = new ArrayList<>();
 
         for (Long constituency = 1L; constituency <= 41; constituency++) {
@@ -39,11 +39,10 @@ public class DatabaseInitializerService {
                 usersToSave.add(user);
             }
         }
-
         userService.saveAll(usersToSave);
     }
 
-    public void autoVoteForUnvotedUsers() {
+    private void autoVoteForUnvotedUsers() {
         List<User> unvotedUsers = userService.findAllByVotedFalse();
 
         Random random = new Random();
@@ -58,5 +57,27 @@ public class DatabaseInitializerService {
                 votingService.vote(user.getUser_id(), randomCandidate.getCandidate_id());
             }
         }
+    }
+
+    private void createSampleUsers() {
+        List<User> sampleUsersToSave = new ArrayList<>();
+
+        for (int i = 1; i <= 10; i++) {
+            User sampleUser = new User();
+            sampleUser.setUsername("admin" + i);
+            sampleUser.setPassword(passwordEncoder.encode("adminPassword" + i));
+            sampleUser.setVoted(false);
+            Constituency sampleUserConstituency = constituencyService.findById(1L);
+            sampleUser.setConstituency(sampleUserConstituency);
+            sampleUsersToSave.add(sampleUser);
+        }
+
+        userService.saveAll(sampleUsersToSave);
+    }
+
+    public void initializeDatabase() {
+        createUsers();
+        autoVoteForUnvotedUsers();
+        createSampleUsers();
     }
 }
