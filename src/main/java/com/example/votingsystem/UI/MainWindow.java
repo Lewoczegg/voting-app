@@ -61,7 +61,7 @@ public class MainWindow {
             }
         });
 
-        alreadyVotedLabel = new TLabel(mainWindow, "", 20, 5);
+        alreadyVotedLabel = new TLabel(mainWindow, "", 30, 5);
     }
 
     @PostConstruct
