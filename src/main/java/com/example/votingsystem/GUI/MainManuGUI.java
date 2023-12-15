@@ -1,21 +1,22 @@
 package com.example.votingsystem.GUI;
 
+import com.example.votingsystem.services.PoliticalPartyService;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.Optional;
+public class MainManuGUI {
 
-public class MainManu {
+    private Stage stage;
+    private VBox mainVBox;
+    private final PoliticalPartyService politicalPartyService;
 
-    Stage stage;
-
-    public MainManu(Stage stage) {
+    public MainManuGUI(Stage stage, PoliticalPartyService politicalPartyService) {
         this.stage = stage;
+        this.politicalPartyService = politicalPartyService;
+        this.mainVBox = createMainManuUI();
     }
 
     public VBox createMainManuUI() {
@@ -49,8 +50,9 @@ public class MainManu {
         btnPokazPartie.setPrefWidth(200);
         btnPokazPartie.setStyle(buttonStyle);
         btnPokazPartie.setOnAction(event -> {
-            // Logic for Pokaż partie
-            System.out.println("Pokaż partie clicked");
+            PoliticalPartyGUI politicalParty = new PoliticalPartyGUI(stage, mainVBox, politicalPartyService);
+            VBox partyVBox = politicalParty.createPartySceneUI();
+            stage.getScene().setRoot(partyVBox);
         });
         btnPokazPartie.setOnMouseEntered(e -> btnPokazPartie.setStyle(buttonStyle + buttonHoverStyle));
         btnPokazPartie.setOnMouseExited(e -> btnPokazPartie.setStyle(buttonStyle));
