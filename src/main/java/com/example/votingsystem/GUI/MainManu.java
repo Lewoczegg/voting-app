@@ -1,11 +1,23 @@
 package com.example.votingsystem.GUI;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class MainManu {
+
+    Stage stage;
+
+    public MainManu(Stage stage) {
+        this.stage = stage;
+    }
+
     public VBox createMainManuUI() {
         VBox vbox = new VBox();
         vbox.setSpacing(14); // Spacing between elements
@@ -61,8 +73,7 @@ public class MainManu {
         btnZamknij.setPrefWidth(200);
         btnZamknij.setStyle(buttonStyle);
         btnZamknij.setOnAction(event -> {
-            // Logic for Zamknij
-            System.out.println("Zamknij clicked");
+            stage.close();
         });
         btnZamknij.setOnMouseEntered(e -> btnZamknij.setStyle(buttonStyle + buttonHoverStyle));
         btnZamknij.setOnMouseExited(e -> btnZamknij.setStyle(buttonStyle));

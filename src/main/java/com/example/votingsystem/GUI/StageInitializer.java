@@ -23,7 +23,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
         stage.setTitle("Voting System");
         stage.setFullScreen(true);
 
-        MainManu mainManu = new MainManu();
+        MainManu mainManu = new MainManu(stage);
         VBox vbox = mainManu.createMainManuUI();
 
         Scene scene = new Scene(vbox, 1366, 768);
