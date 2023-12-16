@@ -5,6 +5,7 @@ import com.example.votingsystem.services.LoginService;
 import com.example.votingsystem.services.PoliticalPartyService;
 import com.example.votingsystem.services.VotingService;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -91,7 +92,20 @@ public class MainManuGUI {
         btnVote.setPrefWidth(200);
         btnVote.setStyle(buttonStyle);
         btnVote.setOnAction(event -> {
-            System.out.println("Głosowanie");
+            if (loginService.getCurrentUser().isVoted()) {
+                vbox.getChildren().clear();
+                vbox.getChildren().add(createHeadingLabel());
+                vbox.getChildren().add(createVoteBtn());
+                vbox.getChildren().add(createAlreadyVotedLabel());
+                vbox.getChildren().add(createShowPartiesBtn());
+                vbox.getChildren().add(createShowResultsBtn());
+                vbox.getChildren().add(createLogOutBtn());
+                vbox.getChildren().add(createCloseBtn());
+            } else {
+                VotePartyGUI votePartyGUI = new VotePartyGUI(stage, vbox, politicalPartyService, candidateService, votingService);
+                VBox votePartyUI = votePartyGUI.createVotePartyUI();
+                stage.getScene().setRoot(votePartyUI);
+            }
         });
         btnVote.setOnMouseEntered(e -> btnVote.setStyle(buttonStyle + buttonHoverStyle));
         btnVote.setOnMouseExited(e -> btnVote.setStyle(buttonStyle));
@@ -158,5 +172,12 @@ public class MainManuGUI {
         btnZamknij.setOnMouseExited(e -> btnZamknij.setStyle(buttonStyle));
 
         return btnZamknij;
+    }
+
+    private Label createAlreadyVotedLabel() {
+        Label messageLabel = new Label();
+        messageLabel.setText("You have already voted.");
+        messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16px; -fx-font-weight: bold;");
+        return messageLabel;
     }
 }
