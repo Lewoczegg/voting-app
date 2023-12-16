@@ -1,5 +1,6 @@
 package com.example.votingsystem.GUI;
 
+import com.example.votingsystem.services.CandidateService;
 import com.example.votingsystem.services.PoliticalPartyService;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -12,10 +13,12 @@ public class MainManuGUI {
     private Stage stage;
     private VBox mainVBox;
     private final PoliticalPartyService politicalPartyService;
+    private final CandidateService candidateService;
 
-    public MainManuGUI(Stage stage, PoliticalPartyService politicalPartyService) {
+    public MainManuGUI(Stage stage, PoliticalPartyService politicalPartyService, CandidateService candidateService) {
         this.stage = stage;
         this.politicalPartyService = politicalPartyService;
+        this.candidateService = candidateService;
         this.mainVBox = createMainManuUI();
     }
 
@@ -50,7 +53,7 @@ public class MainManuGUI {
         btnPokazPartie.setPrefWidth(200);
         btnPokazPartie.setStyle(buttonStyle);
         btnPokazPartie.setOnAction(event -> {
-            PoliticalPartyGUI politicalParty = new PoliticalPartyGUI(stage, mainVBox, politicalPartyService);
+            PoliticalPartyGUI politicalParty = new PoliticalPartyGUI(stage, mainVBox, politicalPartyService, candidateService);
             VBox partyVBox = politicalParty.createPartySceneUI();
             stage.getScene().setRoot(partyVBox);
         });

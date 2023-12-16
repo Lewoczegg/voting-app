@@ -1,10 +1,13 @@
 package com.example.votingsystem.GUI;
 
 import com.example.votingsystem.entities.PoliticalParty;
+import com.example.votingsystem.services.CandidateService;
 import com.example.votingsystem.services.PoliticalPartyService;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -13,12 +16,16 @@ import java.util.List;
 public class PoliticalPartyGUI {
     private Stage stage;
     private VBox mainVbox;
+    private VBox partiesVBox;
     private final PoliticalPartyService politicalPartyService;
+    private final CandidateService candidateService;
 
-    public PoliticalPartyGUI(Stage stage, VBox mainVbox, PoliticalPartyService politicalPartyService) {
+    public PoliticalPartyGUI(Stage stage, VBox mainVbox, PoliticalPartyService politicalPartyService, CandidateService candidateService) {
         this.stage = stage;
         this.mainVbox = mainVbox;
         this.politicalPartyService = politicalPartyService;
+        this.candidateService = candidateService;
+        this.partiesVBox = createPartySceneUI();
     }
 
     public VBox createPartySceneUI() {
@@ -42,8 +49,11 @@ public class PoliticalPartyGUI {
             Button partyButton = new Button(party.getName());
             partyButton.setPrefWidth(500);
             partyButton.setStyle(buttonStyle);
-            // Add your event handler here for button click
-            // partyButton.setOnAction(...)
+            partyButton.setOnAction(event -> {
+                PartyCandidatesGUI partyCandidatesGUI = new PartyCandidatesGUI(stage, partiesVBox, candidateService);
+                BorderPane partyCandidates = partyCandidatesGUI.createPartyDetailUI(party);
+                stage.getScene().setRoot(partyCandidates);
+            });
             partyButton.setOnMouseEntered(e -> partyButton.setStyle(buttonStyle + buttonHoverStyle));
             partyButton.setOnMouseExited(e -> partyButton.setStyle(buttonStyle));
             vbox.getChildren().add(partyButton);
