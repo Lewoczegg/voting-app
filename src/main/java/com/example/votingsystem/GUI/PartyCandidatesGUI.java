@@ -101,7 +101,7 @@ public class PartyCandidatesGUI {
     }
 
     private Image getPartyLogo(Long partyId) {
-        
+
         Image image = null;
 
         if (partyId == 1) {

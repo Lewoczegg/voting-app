@@ -1,7 +1,9 @@
 package com.example.votingsystem.GUI;
 
 import com.example.votingsystem.services.CandidateService;
+import com.example.votingsystem.services.LoginService;
 import com.example.votingsystem.services.PoliticalPartyService;
+import com.example.votingsystem.services.VotingService;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,57 +13,108 @@ import javafx.stage.Stage;
 public class MainManuGUI {
 
     private Stage stage;
-    private VBox mainVBox;
     private final PoliticalPartyService politicalPartyService;
     private final CandidateService candidateService;
+    private final LoginService loginService;
+    private final VotingService votingService;
 
-    public MainManuGUI(Stage stage, PoliticalPartyService politicalPartyService, CandidateService candidateService) {
+    // Button CSS styles
+    String buttonStyle = "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-font-size: 20px; -fx-padding: 10px 20px; -fx-border-radius: 15px; -fx-background-radius: 15px;";
+    String buttonHoverStyle = "-fx-background-color: #005BA1;";
+
+    VBox vbox = new VBox();
+
+    public MainManuGUI(Stage stage, PoliticalPartyService politicalPartyService, CandidateService candidateService, LoginService loginService, VotingService votingService) {
         this.stage = stage;
         this.politicalPartyService = politicalPartyService;
         this.candidateService = candidateService;
-        this.mainVBox = createMainManuUI();
+        this.loginService = loginService;
+        this.votingService = votingService;
     }
 
     public VBox createMainManuUI() {
-        VBox vbox = new VBox();
+
         vbox.setSpacing(14); // Spacing between elements
         vbox.setAlignment(Pos.CENTER);
 
         // Heading label
+        vbox.getChildren().add(createHeadingLabel());
+
+        // Button 1: Zaloguj | Vote
+        if (loginService.isLoggedIn()) {
+            vbox.getChildren().add(createVoteBtn());
+        } else {
+            vbox.getChildren().add(createLogInBtn());
+        }
+
+        // Button 2: Pokaż partie
+        vbox.getChildren().add(createShowPartiesBtn());
+
+        // Button 3: Pokaż wyniki
+        vbox.getChildren().add(createShowResultsBtn());
+
+        //Button 4: Wyloguj
+        if (loginService.isLoggedIn()) {
+            vbox.getChildren().add(createLogOutBtn());
+        }
+
+        // Button 5: Zamknij
+        vbox.getChildren().add(createCloseBtn());
+
+        return vbox;
+    }
+
+    private Label createHeadingLabel() {
         Label heading = new Label("System głosowania");
         heading.setStyle("-fx-font-size: 28px; -fx-text-fill: black;");
-        vbox.getChildren().add(heading);
 
-        // Button CSS styles
-        String buttonStyle = "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-font-size: 20px; -fx-padding: 10px 20px; -fx-border-radius: 15px; -fx-background-radius: 15px;";
-        String buttonHoverStyle = "-fx-background-color: #005BA1;"; // Darker shade on hover
+        return heading;
+    }
 
-        // Button 1: Zaloguj
+    private Button createLogInBtn() {
         Button btnZaloguj = new Button("Zaloguj");
         btnZaloguj.setPrefWidth(200);
         btnZaloguj.setStyle(buttonStyle);
         btnZaloguj.setOnAction(event -> {
-            // Logic for Zaloguj
-            System.out.println("Zaloguj clicked");
+            LoginGUI loginGUI = new LoginGUI(stage, loginService, politicalPartyService, candidateService, votingService);
+            VBox loginUI = loginGUI.createLoginUI();
+            stage.getScene().setRoot(loginUI);
         });
         btnZaloguj.setOnMouseEntered(e -> btnZaloguj.setStyle(buttonStyle + buttonHoverStyle));
         btnZaloguj.setOnMouseExited(e -> btnZaloguj.setStyle(buttonStyle));
-        vbox.getChildren().add(btnZaloguj);
 
-        // Button 2: Pokaż partie
+        return btnZaloguj;
+    }
+
+    private Button createVoteBtn() {
+        Button btnVote = new Button("Zagłosuj");
+        btnVote.setPrefWidth(200);
+        btnVote.setStyle(buttonStyle);
+        btnVote.setOnAction(event -> {
+            System.out.println("Głosowanie");
+        });
+        btnVote.setOnMouseEntered(e -> btnVote.setStyle(buttonStyle + buttonHoverStyle));
+        btnVote.setOnMouseExited(e -> btnVote.setStyle(buttonStyle));
+
+        return btnVote;
+    }
+
+    private Button createShowPartiesBtn() {
         Button btnPokazPartie = new Button("Pokaż partie");
         btnPokazPartie.setPrefWidth(200);
         btnPokazPartie.setStyle(buttonStyle);
         btnPokazPartie.setOnAction(event -> {
-            PoliticalPartyGUI politicalParty = new PoliticalPartyGUI(stage, mainVBox, politicalPartyService, candidateService);
+            PoliticalPartyGUI politicalParty = new PoliticalPartyGUI(stage, vbox, politicalPartyService, candidateService);
             VBox partyVBox = politicalParty.createPartySceneUI();
             stage.getScene().setRoot(partyVBox);
         });
         btnPokazPartie.setOnMouseEntered(e -> btnPokazPartie.setStyle(buttonStyle + buttonHoverStyle));
         btnPokazPartie.setOnMouseExited(e -> btnPokazPartie.setStyle(buttonStyle));
-        vbox.getChildren().add(btnPokazPartie);
 
-        // Button 3: Pokaż wyniki
+        return btnPokazPartie;
+    }
+
+    private Button createShowResultsBtn() {
         Button btnPokazWyniki = new Button("Pokaż wyniki");
         btnPokazWyniki.setPrefWidth(200);
         btnPokazWyniki.setStyle(buttonStyle);
@@ -71,9 +124,30 @@ public class MainManuGUI {
         });
         btnPokazWyniki.setOnMouseEntered(e -> btnPokazWyniki.setStyle(buttonStyle + buttonHoverStyle));
         btnPokazWyniki.setOnMouseExited(e -> btnPokazWyniki.setStyle(buttonStyle));
-        vbox.getChildren().add(btnPokazWyniki);
 
-        // Button 4: Zamknij
+        return btnPokazWyniki;
+    }
+
+    private Button createLogOutBtn() {
+        Button btnWyloguj = new Button("Wyloguj");
+        btnWyloguj.setPrefWidth(200);
+        btnWyloguj.setStyle(buttonStyle);
+        btnWyloguj.setOnAction(event -> {
+            loginService.logout();
+            vbox.getChildren().clear();
+            vbox.getChildren().add(createHeadingLabel());
+            vbox.getChildren().add(createLogInBtn());
+            vbox.getChildren().add(createShowPartiesBtn());
+            vbox.getChildren().add(createShowResultsBtn());
+            vbox.getChildren().add(createCloseBtn());
+        });
+        btnWyloguj.setOnMouseEntered(e -> btnWyloguj.setStyle(buttonStyle + buttonHoverStyle));
+        btnWyloguj.setOnMouseExited(e -> btnWyloguj.setStyle(buttonStyle));
+
+        return btnWyloguj;
+    }
+
+    private Button createCloseBtn() {
         Button btnZamknij = new Button("Zamknij");
         btnZamknij.setPrefWidth(200);
         btnZamknij.setStyle(buttonStyle);
@@ -82,8 +156,7 @@ public class MainManuGUI {
         });
         btnZamknij.setOnMouseEntered(e -> btnZamknij.setStyle(buttonStyle + buttonHoverStyle));
         btnZamknij.setOnMouseExited(e -> btnZamknij.setStyle(buttonStyle));
-        vbox.getChildren().add(btnZamknij);
 
-        return vbox;
+        return btnZamknij;
     }
 }
