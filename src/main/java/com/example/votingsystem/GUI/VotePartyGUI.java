@@ -2,6 +2,7 @@ package com.example.votingsystem.GUI;
 
 import com.example.votingsystem.entities.PoliticalParty;
 import com.example.votingsystem.services.CandidateService;
+import com.example.votingsystem.services.LoginService;
 import com.example.votingsystem.services.PoliticalPartyService;
 import com.example.votingsystem.services.VotingService;
 import javafx.geometry.Pos;
@@ -18,13 +19,16 @@ public class VotePartyGUI {
     private final PoliticalPartyService politicalPartyService;
     private final CandidateService candidateService;
     private final VotingService votingService;
+    private final LoginService loginService;
 
-    public VotePartyGUI(Stage stage, VBox mainVBox, PoliticalPartyService politicalPartyService, CandidateService candidateService, VotingService votingService) {
+    public VotePartyGUI(Stage stage, VBox mainVBox, PoliticalPartyService politicalPartyService, CandidateService candidateService, VotingService votingService, LoginService loginService) {
         this.stage = stage;
         this.mainVBox = mainVBox;
         this.politicalPartyService = politicalPartyService;
         this.candidateService = candidateService;
         this.votingService = votingService;
+        this.loginService = loginService;
+        this.partiesVBox = createVotePartyUI();
     }
 
     // Button CSS styles
@@ -44,8 +48,9 @@ public class VotePartyGUI {
             partyButton.setPrefWidth(500);
             partyButton.setStyle(buttonStyle);
             partyButton.setOnAction(event -> {
-                // Handle voting logic for the selected party
-                System.out.println("Voted for " + party.getName());
+                VoteCandidateGUI voteCandidateGUI = new VoteCandidateGUI(stage, mainVBox, partiesVBox, candidateService, votingService, loginService);
+                VBox voteCandidateUI = voteCandidateGUI.createVoteCandidateUI(party);
+                stage.getScene().setRoot(voteCandidateUI);
             });
             partyButton.setOnMouseEntered(e -> partyButton.setStyle(buttonStyle + buttonHoverStyle));
             partyButton.setOnMouseExited(e -> partyButton.setStyle(buttonStyle));

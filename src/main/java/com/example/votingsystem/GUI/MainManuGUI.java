@@ -5,7 +5,6 @@ import com.example.votingsystem.services.LoginService;
 import com.example.votingsystem.services.PoliticalPartyService;
 import com.example.votingsystem.services.VotingService;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -102,7 +101,7 @@ public class MainManuGUI {
                 vbox.getChildren().add(createLogOutBtn());
                 vbox.getChildren().add(createCloseBtn());
             } else {
-                VotePartyGUI votePartyGUI = new VotePartyGUI(stage, vbox, politicalPartyService, candidateService, votingService);
+                VotePartyGUI votePartyGUI = new VotePartyGUI(stage, vbox, politicalPartyService, candidateService, votingService, loginService);
                 VBox votePartyUI = votePartyGUI.createVotePartyUI();
                 stage.getScene().setRoot(votePartyUI);
             }
@@ -176,7 +175,7 @@ public class MainManuGUI {
 
     private Label createAlreadyVotedLabel() {
         Label messageLabel = new Label();
-        messageLabel.setText("You have already voted.");
+        messageLabel.setText("Twój głos już został oddany");
         messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16px; -fx-font-weight: bold;");
         return messageLabel;
     }
