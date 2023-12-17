@@ -18,4 +18,4 @@ The Voting System is a Spring-based application that facilitates a secure and in
 - Developed with Spring Boot, leveraging the Spring framework's robustness.
 - Data persistence with MySQL, ensuring reliable storage.
 - User authentication and authorization handled by Spring Security.
-- Text-based User Interface (TUI) created with Jexer.
+- Graphical User Interface (GUI) created with JavaFX.
