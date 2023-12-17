@@ -76,7 +76,7 @@ public class LoginGUI {
                 stage.getScene().setRoot(mainVBox);
             } else {
                 System.out.println("Login failed");
-                statusLabel.setText("Login failed. Please try again.");
+                statusLabel.setText("Logowanie nie powiodło się. Proszę spróbuj ponownie.");
             }
         });
         btnZaloguj.setOnMouseEntered(e -> btnZaloguj.setStyle(buttonStyle + buttonHoverStyle));

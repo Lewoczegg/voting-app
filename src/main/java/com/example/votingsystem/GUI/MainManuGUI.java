@@ -132,8 +132,9 @@ public class MainManuGUI {
         btnPokazWyniki.setPrefWidth(200);
         btnPokazWyniki.setStyle(buttonStyle);
         btnPokazWyniki.setOnAction(event -> {
-            // Logic for Pokaż wyniki
-            System.out.println("Pokaż wyniki clicked");
+            ResultsPartyGUI resultsPartyGUI = new ResultsPartyGUI(stage, vbox, votingService);
+            VBox resultsPartyUI = resultsPartyGUI.createResultsPartyUI();
+            stage.getScene().setRoot(resultsPartyUI);
         });
         btnPokazWyniki.setOnMouseEntered(e -> btnPokazWyniki.setStyle(buttonStyle + buttonHoverStyle));
         btnPokazWyniki.setOnMouseExited(e -> btnPokazWyniki.setStyle(buttonStyle));
