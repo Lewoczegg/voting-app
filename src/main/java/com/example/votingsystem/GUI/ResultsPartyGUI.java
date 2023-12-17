@@ -13,8 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javafx.scene.chart.PieChart.Data;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ResultsPartyGUI {
@@ -78,8 +76,22 @@ public class ResultsPartyGUI {
         hbox.getChildren().addAll(labelsBox, pieChart);
 
         rootBox = new VBox(heading, hbox); // VBox to hold the heading and HBox
+        rootBox.setSpacing(10);
         rootBox.setAlignment(Pos.CENTER);
 
+        // Details button
+        Button btnDetails = new Button("Szczegóły");
+        btnDetails.setPrefWidth(300);
+        btnDetails.setStyle(buttonStyle);
+        btnDetails.setOnAction(event -> {
+            ResultsCandidatesGUI resultsCandidatesGUI = new ResultsCandidatesGUI(stage, rootBox, votingService);
+            VBox resultsCandidatesUI = resultsCandidatesGUI.createResultsCandidatesUI();
+            stage.getScene().setRoot(resultsCandidatesUI);
+        });
+        btnDetails.setOnMouseEntered(e -> btnDetails.setStyle(buttonStyle + buttonHoverStyle));
+        btnDetails.setOnMouseExited(e -> btnDetails.setStyle(buttonStyle));
+
+        rootBox.getChildren().add(btnDetails);
 
         // Wroc button
         Button btnWroc = new Button("Wróć");
@@ -91,7 +103,7 @@ public class ResultsPartyGUI {
         btnWroc.setOnMouseEntered(e -> btnWroc.setStyle(buttonStyle + buttonHoverStyle));
         btnWroc.setOnMouseExited(e -> btnWroc.setStyle(buttonStyle));
 
-        rootBox.getChildren().add(btnWroc); // Add the button to the root VBox
+        rootBox.getChildren().add(btnWroc);
         return rootBox;
     }
 }
